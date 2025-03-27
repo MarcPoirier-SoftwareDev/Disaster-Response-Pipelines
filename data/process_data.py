@@ -49,6 +49,9 @@ def clean_data(df):
     # Concatenate the new category columns to the dataframe
     df = pd.concat([df, categories], axis=1)
     
+    # Drop rows where 'related' is 2
+    df = df[df['related'] != 2]
+    
     # Remove duplicate rows
     df = df.drop_duplicates()
     return df
@@ -65,7 +68,7 @@ def save_data(df, database_filename):
     engine = create_engine(f'sqlite:///{database_filename}')
     
     # Save the dataframe to a table named 'Messages'
-    df.to_sql('Messages', engine, index=False)
+    df.to_sql('Messages', engine, index=False, if_exists='replace')
 
 def main():
     """
